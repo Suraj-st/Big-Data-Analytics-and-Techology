@@ -1,0 +1,33 @@
+// Find all users connected to Alice within 2 degrees of separation
+MATCH path = (alice:User {name: 'Alice'})-[:IS_FRIENDS_WITH*1..2]-(connected:User)
+WHERE connected <> alice
+RETURN alice.name as StartingUser, 
+       connected.name as ConnectedUser,
+       length(path) as DegreesAway
+ORDER BY DegreesAway;
+
+// Find the most connected movie (by user views and actor connections)
+MATCH (m:Movie)
+WITH m, 
+     size([(m)<-[:VIEWED]-() | 1]) as viewerCount,
+     size([(m)<-[:ACTED_IN]-() | 1]) as actorCount,
+     size([(m)<--() | 1]) as totalConnections
+RETURN m.title as Movie, 
+       viewerCount as UsersWatched, 
+       actorCount as Actors,
+       totalConnections as TotalConnections
+ORDER BY totalConnections DESC
+LIMIT 3;
+
+// Find the shortest connection path between Bob and Dave through movies
+MATCH path = shortestPath((bob:User {name: 'Bob'})-[:VIEWED|ACTED_IN*]-(dave:User {name: 'Dave'}))
+RETURN [node in nodes(path) | 
+  CASE 
+    WHEN node:User THEN 'User: ' + node.name
+    WHEN node:Movie THEN 'Movie: ' + node.title 
+    WHEN node:Actor THEN 'Actor: ' + node.name
+    ELSE labels(node)[0]
+  END] as ConnectionPath,
+  length(path) as HopCount;
+  
+

@@ -1,0 +1,52 @@
+// Create Users
+CREATE (alice:User {user_id: 'U1', name: 'Alice', age_group: '25-34'}),
+       (bob:User {user_id: 'U2', name: 'Bob', age_group: '18-24'}),
+       (carol:User {user_id: 'U3', name: 'Carol', age_group: '25-34'}),
+       (dave:User {user_id: 'U4', name: 'Dave', age_group: '35-44'}),
+       (eve:User {user_id: 'U5', name: 'Eve', age_group: '18-24'})
+
+// Create Movies
+CREATE (inception:Movie {movie_id: 'M1', title: 'Inception', genre: 'Sci-Fi'}),
+       (matrix:Movie {movie_id: 'M2', title: 'The Matrix', genre: 'Sci-Fi'}),
+       (shawshank:Movie {movie_id: 'M3', title: 'The Shawshank Redemption', genre: 'Drama'}),
+       (pulp:Movie {movie_id: 'M4', title: 'Pulp Fiction', genre: 'Crime'}),
+       (darkknight:Movie {movie_id: 'M5', title: 'The Dark Knight', genre: 'Action'}),
+       (godfather:Movie {movie_id: 'M6', title: 'The Godfather', genre: 'Crime'})
+
+// Create Actors
+CREATE (leo:Actor {actor_id: 'A1', name: 'Leonardo DiCaprio'}),
+       (keanu:Actor {actor_id: 'A2', name: 'Keanu Reeves'}),
+       (morgan:Actor {actor_id: 'A3', name: 'Morgan Freeman'}),
+       (tom:Actor {actor_id: 'A4', name: 'Tom Hanks'})
+
+// Create VIEWED relationships (with ratings)
+CREATE (alice)-[:VIEWED {rating: 5}]->(inception),
+       (alice)-[:VIEWED {rating: 4}]->(shawshank),
+       (alice)-[:VIEWED {rating: 3}]->(pulp),
+       
+       (bob)-[:VIEWED {rating: 5}]->(matrix),
+       (bob)-[:VIEWED {rating: 4}]->(darkknight),
+       (bob)-[:VIEWED {rating: 2}]->(godfather),
+       
+       (carol)-[:VIEWED {rating: 4}]->(inception),
+       (carol)-[:VIEWED {rating: 5}]->(shawshank),
+       (carol)-[:VIEWED {rating: 4}]->(darkknight),
+       
+       (dave)-[:VIEWED {rating: 3}]->(matrix),
+       (dave)-[:VIEWED {rating: 5}]->(godfather),
+       
+       (eve)-[:VIEWED {rating: 4}]->(inception),
+       (eve)-[:VIEWED {rating: 5}]->(pulp)
+
+// Create FRIEND relationships
+CREATE (alice)-[:IS_FRIENDS_WITH]->(bob),
+       (alice)-[:IS_FRIENDS_WITH]->(carol),
+       (bob)-[:IS_FRIENDS_WITH]->(eve),
+       (carol)-[:IS_FRIENDS_WITH]->(dave)
+
+// Create ACTED_IN relationships
+CREATE (leo)-[:ACTED_IN]->(inception),
+       (keanu)-[:ACTED_IN]->(matrix),
+       (morgan)-[:ACTED_IN]->(shawshank),
+       (morgan)-[:ACTED_IN]->(darkknight),
+       (tom)-[:ACTED_IN]->(shawshank)
